@@ -1,0 +1,194 @@
+digraph ParkingFinderSchema {
+    graph [rankdir=LR, fontsize=10];
+
+    node [shape=plaintext];
+
+    // Helper function: draw table
+    // Each table is an HTML-like label
+
+    UserTable [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>User</B></TD></TR>
+            <TR><TD>id (PK)</TD><TD></TD></TR>
+            <TR><TD>fullName</TD><TD></TD></TR>
+            <TR><TD>email</TD><TD></TD></TR>
+            <TR><TD>phone</TD><TD></TD></TR>
+            <TR><TD>role</TD><TD></TD></TR>
+            <TR><TD>createdAt</TD><TD></TD></TR>
+        </TABLE>
+    >];
+
+    LandlordProfile [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>LandlordProfile</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>userId (FK → User.id)</TD></TR>
+            <TR><TD>displayName</TD></TR>
+            <TR><TD>verificationStatus</TD></TR>
+            <TR><TD>payoutAccountId (FK → PayoutAccount.id)</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    TenantProfile [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>TenantProfile</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>userId (FK → User.id)</TD></TR>
+            <TR><TD>defaultPaymentMethodId</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    Listing [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>Listing</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>ownerId (FK → LandlordProfile.id)</TD></TR>
+            <TR><TD>addressId (FK → Address.id)</TD></TR>
+            <TR><TD>title</TD></TR>
+            <TR><TD>description</TD></TR>
+            <TR><TD>pricePerHour</TD></TR>
+            <TR><TD>pricePerDay</TD></TR>
+            <TR><TD>currency</TD></TR>
+            <TR><TD>images</TD></TR>
+            <TR><TD>size</TD></TR>
+            <TR><TD>covered</TD></TR>
+            <TR><TD>visible</TD></TR>
+            <TR><TD>status</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    VerificationDocument [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>VerificationDocument</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>landlordId (FK → LandlordProfile.id)</TD></TR>
+            <TR><TD>type</TD></TR>
+            <TR><TD>url</TD></TR>
+            <TR><TD>uploadedAt</TD></TR>
+            <TR><TD>verifiedAt</TD></TR>
+            <TR><TD>verifierId</TD></TR>
+        </TABLE>
+    >];
+
+    PayoutAccount [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>PayoutAccount</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>landlordId (FK → LandlordProfile.id)</TD></TR>
+            <TR><TD>provider</TD></TR>
+            <TR><TD>accountIdentifier</TD></TR>
+            <TR><TD>verified</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    Address [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>Address</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>street</TD></TR>
+            <TR><TD>city</TD></TR>
+            <TR><TD>region</TD></TR>
+            <TR><TD>postalCode</TD></TR>
+            <TR><TD>country</TD></TR>
+            <TR><TD>lat</TD></TR>
+            <TR><TD>lng</TD></TR>
+        </TABLE>
+    >];
+
+    AvailabilitySlot [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>AvailabilitySlot</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>listingId (FK → Listing.id)</TD></TR>
+            <TR><TD>start</TD></TR>
+            <TR><TD>end</TD></TR>
+            <TR><TD>recurringRule</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    Vehicle [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>Vehicle</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>tenantId (FK → TenantProfile.id)</TD></TR>
+            <TR><TD>licensePlate</TD></TR>
+            <TR><TD>make</TD></TR>
+            <TR><TD>model</TD></TR>
+            <TR><TD>color</TD></TR>
+        </TABLE>
+    >];
+
+    Booking [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>Booking</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>listingId (FK → Listing.id)</TD></TR>
+            <TR><TD>tenantId (FK → TenantProfile.id)</TD></TR>
+            <TR><TD>slotId (FK → AvailabilitySlot.id)</TD></TR>
+            <TR><TD>vehicleId (FK → Vehicle.id)</TD></TR>
+            <TR><TD>start</TD></TR>
+            <TR><TD>end</TD></TR>
+            <TR><TD>totalPrice</TD></TR>
+            <TR><TD>currency</TD></TR>
+            <TR><TD>status</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+            <TR><TD>paymentId (FK → Payment.id)</TD></TR>
+        </TABLE>
+    >];
+
+    Payment [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>Payment</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>bookingId (FK → Booking.id)</TD></TR>
+            <TR><TD>amount</TD></TR>
+            <TR><TD>currency</TD></TR>
+            <TR><TD>method</TD></TR>
+            <TR><TD>status</TD></TR>
+            <TR><TD>providerReference</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    Review [label=<
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0">
+            <TR><TD COLSPAN="2"><B>Review</B></TD></TR>
+            <TR><TD>id (PK)</TD></TR>
+            <TR><TD>bookingId (FK → Booking.id)</TD></TR>
+            <TR><TD>reviewerId (FK → User.id)</TD></TR>
+            <TR><TD>rating</TD></TR>
+            <TR><TD>comment</TD></TR>
+            <TR><TD>createdAt</TD></TR>
+        </TABLE>
+    >];
+
+    // RELATIONSHIPS
+
+    UserTable -> LandlordProfile [label="1 → 0..1"];
+    UserTable -> TenantProfile [label="1 → 0..1"];
+
+    LandlordProfile -> Listing [label="1 → many"];
+    LandlordProfile -> VerificationDocument [label="1 → many"];
+    LandlordProfile -> PayoutAccount [label="1 → 0..1"];
+
+    Listing -> Address [label="1 → 1"];
+    Listing -> AvailabilitySlot [label="1 → many"];
+    Listing -> Booking [label="1 → many"];
+
+    TenantProfile -> Vehicle [label="1 → many"];
+    TenantProfile -> Booking [label="1 → many"];
+
+    AvailabilitySlot -> Booking [label="1 → many"];
+
+    Vehicle -> Booking [label="1 → many"];
+
+    Booking -> Payment [label="1 → 0..1"];
+    Booking -> Review [label="1 → 0..1"];
+
+    Review -> UserTable [label="reviewer"];
+}
